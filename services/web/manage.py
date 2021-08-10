@@ -14,7 +14,7 @@ def create_db():
 
 @cli.command("seed_db")
 def seed_db():
-    db.session.add(Item(name="sawright4216@gmail.com"))
+    db.session.add(Item(name="Sarah"))
     db.session.commit()
 
 if __name__ == "__main__":
