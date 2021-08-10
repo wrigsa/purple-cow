@@ -25,7 +25,7 @@ def hello_world():
     return jsonify(hello="world")
 
 @app.route('/items', methods=['POST', 'GET', 'DELETE'])
-def set_items():
+def set_fetch_delete_items():
     if request.method == 'POST':
         db.session.query(Item).delete()
         db.session.commit()
@@ -55,10 +55,42 @@ def set_items():
 
 @app.route("/items/add", methods=['POST'])
 def add_item():
-    data = request.get_json()
-    for datum in data:
-        item_name = data['name']
-        db.session.add(Item(name=item_name))
+    data = json.loads(request.data)
+    json_array = json.loads(request.data)
+    for item in json_array:
+        db.session.add(Item(name=item['name']))
         db.session.commit()
     return json.dumps("Added"), 200
-    
+
+@app.route("/items/<id>", methods=['DELETE','PUT','GET'])
+def add_modify_fetch_delete_item(id):
+    if request.method == 'GET':
+        item = Item.query.get(id)
+        if (item):
+            new_item = {
+                "id": item.id,
+                "name": item.name
+            }
+            return json.dumps(new_item), 200
+        else:
+            return json.dumps("Error: Entry with id {} does not exist".format(id)), 404
+
+    elif request.method == 'PUT':
+        data = json.loads(request.data)
+        name = data['name']
+        item = Item.query.get(id)
+        if (item):
+            item.name = name
+            db.session.commit()
+            return json.dumps("Edited"), 200
+        else:
+            return json.dumps("Error: Entry with id {} does not exist".format(id)), 404
+    elif request.method == 'DELETE':
+        item = Item.query.get(id)
+        if (item):
+            db.session.query(Item).filter_by(id=id).delete()
+            db.session.commit()
+            return json.dumps("Deleted"), 200
+        else:
+            return json.dumps("Error: Entry with id {} does not exist".format(id)), 404
+
