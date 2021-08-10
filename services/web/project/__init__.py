@@ -13,9 +13,8 @@ db = SQLAlchemy(app)
 class Item(db.Model):
     __tablename__ = "items"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128), unique=True, nullable=False)
-    active = db.Column(db.Boolean(), default=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    name = db.Column(db.String(128), unique=False, nullable=False)
 
     def __init__(self, name):
         self.name = name
@@ -25,12 +24,33 @@ class Item(db.Model):
 def hello_world():
     return jsonify(hello="world")
 
-@app.route('/items', methods=['POST'])
+@app.route('/items', methods=['POST', 'GET', 'DELETE'])
 def set_items():
-    data = request.get_json()
-    item_name = data['name']
-    db.session.add(Item(name=item_name))
-    db.session.commit()
-    return json.dumps("Added"), 200
+    if request.method == 'POST':
+        data = request.get_json()
+        for datum in data:
+            item_name = data['name']
+            db.session.add(Item(name=item_name))
+            db.session.commit()
+        
+        return json.dumps("Added"), 200
+    elif request.method == 'GET':
+        items = Item.query.all()
+        all_items = []
+        for item in items:
+            new_item = {
+                "id": item.id,
+                "name": item.name
+            }
+
+            all_items.append(new_item)
+
+        return json.dumps(all_items), 200
+    elif request.method == 'DELETE':
+        db.session.query(Item).delete()
+        db.session.commit()
+        return json.dumps("Deleted"), 200
+
+
 
 
