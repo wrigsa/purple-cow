@@ -55,9 +55,25 @@ def set_fetch_delete_items():
 
 @app.route("/items/add", methods=['POST'])
 def add_item():
-    data = request.get_json()
-    item_name = data['name']
-    db.session.add(Item(name=item_name))
-    db.session.commit()
+    data = json.loads(request.data)
+    json_array = json.loads(request.data)
+    for item in json_array:
+        db.session.add(Item(name=item['name']))
+        db.session.commit()
     return json.dumps("Added"), 200
-    
+
+@app.route("/items/<id>", methods=['DELETE','PUT','GET'])
+def add_modify_fetch_delete_item(id):
+    if request.method == 'GET':
+        item = Item.query.get(id)
+        new_item = {
+            "id": item.id,
+            "name": item.name
+        }
+        return json.dumps(new_item), 200
+
+    elif request.method == 'PUT':
+        pass
+    elif request.method == 'GET':
+        pass
+
