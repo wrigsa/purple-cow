@@ -25,7 +25,7 @@ def hello_world():
     return jsonify(hello="world")
 
 @app.route('/items', methods=['POST', 'GET', 'DELETE'])
-def set_items():
+def set_fetch_delete_items():
     if request.method == 'POST':
         db.session.query(Item).delete()
         db.session.commit()
@@ -56,9 +56,8 @@ def set_items():
 @app.route("/items/add", methods=['POST'])
 def add_item():
     data = request.get_json()
-    for datum in data:
-        item_name = data['name']
-        db.session.add(Item(name=item_name))
-        db.session.commit()
+    item_name = data['name']
+    db.session.add(Item(name=item_name))
+    db.session.commit()
     return json.dumps("Added"), 200
     
