@@ -66,19 +66,31 @@ def add_item():
 def add_modify_fetch_delete_item(id):
     if request.method == 'GET':
         item = Item.query.get(id)
-        new_item = {
-            "id": item.id,
-            "name": item.name
-        }
-        return json.dumps(new_item), 200
+        if (item):
+            new_item = {
+                "id": item.id,
+                "name": item.name
+            }
+            return json.dumps(new_item), 200
+        else:
+            return json.dumps("Error: Entry with id {} does not exist".format(id)), 404
 
     elif request.method == 'PUT':
         data = json.loads(request.data)
         name = data['name']
         item = Item.query.get(id)
-        item.name = name
-        db.session.commit()
-        return json.dumps("Edited"), 200
+        if (item):
+            item.name = name
+            db.session.commit()
+            return json.dumps("Edited"), 200
+        else:
+            return json.dumps("Error: Entry with id {} does not exist".format(id)), 404
     elif request.method == 'DELETE':
-        pass
+        item = Item.query.get(id)
+        if (item):
+            db.session.query(Item).filter_by(id=id).delete()
+            db.session.commit()
+            return json.dumps("Deleted"), 200
+        else:
+            return json.dumps("Error: Entry with id {} does not exist".format(id)), 404
 
