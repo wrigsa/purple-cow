@@ -73,7 +73,12 @@ def add_modify_fetch_delete_item(id):
         return json.dumps(new_item), 200
 
     elif request.method == 'PUT':
-        pass
-    elif request.method == 'GET':
+        data = json.loads(request.data)
+        name = data['name']
+        item = Item.query.get(id)
+        item.name = name
+        db.session.commit()
+        return json.dumps("Edited"), 200
+    elif request.method == 'DELETE':
         pass
 
