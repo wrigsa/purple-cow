@@ -27,13 +27,14 @@ def hello_world():
 @app.route('/items', methods=['POST', 'GET', 'DELETE'])
 def set_items():
     if request.method == 'POST':
-        data = request.get_json()
-        for datum in data:
-            item_name = data['name']
-            db.session.add(Item(name=item_name))
+        db.session.query(Item).delete()
+        db.session.commit()
+        json_array = json.loads(request.data)
+        for item in json_array:
+            db.session.add(Item(name=item['name']))
             db.session.commit()
-        
-        return json.dumps("Added"), 200
+        return json.dumps("Set"), 200
+
     elif request.method == 'GET':
         items = Item.query.all()
         all_items = []
@@ -46,11 +47,18 @@ def set_items():
             all_items.append(new_item)
 
         return json.dumps(all_items), 200
+
     elif request.method == 'DELETE':
         db.session.query(Item).delete()
         db.session.commit()
         return json.dumps("Deleted"), 200
 
-
-
-
+@app.route("/items/add", methods=['POST'])
+def add_item():
+    data = request.get_json()
+    for datum in data:
+        item_name = data['name']
+        db.session.add(Item(name=item_name))
+        db.session.commit()
+    return json.dumps("Added"), 200
+    
