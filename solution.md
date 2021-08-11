@@ -7,7 +7,7 @@ The Purple Cow Project includes:
 * Item objects with two attributes, "id" and "name."
 * Items persisted in memory while the application is running. More on this below.
 
-To build the web app, run docker-compose up --build in the base directory
+To build the web app, run `docker-compose up --build` in the base directory
 
 ## cURL requests to interact with the endpoints
 
