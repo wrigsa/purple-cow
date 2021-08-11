@@ -52,3 +52,9 @@ To update an item by id, run (replacing \<id\> with your desired id and replacin
 --header 'Content-Type: text/plain' \
 --data-raw '{"name": "catty mcCatFace"}'`
 
+## Upcoming
+
+In the future, I'd like to work to do more error handling to check the data passed to the endpoints. I'd also like to identify and test the corner cases for robustness.
+
+Feature-wise, I'd like to add the ability to seach for items by name, trash items instead of deleting them to soft delete items, and I'd like to add the ability to create relationships between the items so that the user may easily traverse the database by accessing those relationships.
+
