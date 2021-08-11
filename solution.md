@@ -3,9 +3,9 @@ This repository contains code for the Purple Cow Project.
 
 The Purple Cow Project includes:
 * A restful API served on port 3000.
-* endpoints on the "/items" resource that allow clients to retrieve the current items, set the list of items, and delete all of the items. Mosre on this below.
+* endpoints on the "/items" resource that allow clients to retrieve the current items, set the list of items, delete all of the items, and more. More on this below.
 * Item objects with two attributes, "id" and "name."
-* Items persisted in memory while the application is running. More on this below.
+* Items persisted in memory while the application is running. The application utilizes a postgres database to store and retrieve data. 
 
 To build the web app, run `docker-compose up --build` in the base directory
 
