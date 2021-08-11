@@ -7,8 +7,54 @@ The Purple Cow Project includes:
 * Item objects with two attributes, "id" and "name."
 * Items persisted in memory while the application is running. More on this below.
 
-To build the web app, run docker-compose up -d --build in the base directory
+To build the web app, run `docker-compose up --build` in the base directory
 
-To run the web app, run docker-compose exec web python manage.py create_db
+## cURL requests to interact with the endpoints
 
-To tear down the web app, run docker-compose down -v
+### Set, Get, and Delete all Items
+
+To set all the items in the database, run (replacing the names with your desired names)
+
+`curl --location --request POST 'http://127.0.0.1:3000/items' \
+--header 'Content-Type: text/plain' \
+--data-raw '[{"name": "catty mcCatFace"}, {"name": "batty mcBatFace"}]'`
+
+To get all the items in the database, run 
+
+`curl --location --request GET 'http://127.0.0.1:3000/items'`
+
+To delete all the items in the database, run 
+
+`curl --location --request DELETE 'http://127.0.0.1:3000/items'`
+
+### Add to the List of Items
+
+To add to the list of items in the databse. run (replacing the names with your desired names)
+
+`curl --location --request POST 'http://127.0.0.1:3000/items/add' \
+--header 'Content-Type: text/plain' \
+--data-raw '[{"name": "catty mcCatFace"}, {"name": "batty mcBatFace"}]'`
+
+### Get item, delete item, or update item by ID
+
+To get an item by id, run (replacing \<id\> with your desired id)
+
+`curl --location --request GET 'http://127.0.0.1:3000/items/<id>'`
+
+To delete an item by id, run (replacing \<id\> with your desired id)
+
+`curl --location --request DELETE 'http://127.0.0.1:3000/items/<id>'`
+
+
+To update an item by id, run (replacing \<id\> with your desired id and replacing the name with your desired name)
+
+`curl --location --request PUT 'http://127.0.0.1:3000/items/3' \
+--header 'Content-Type: text/plain' \
+--data-raw '{"name": "catty mcCatFace"}'`
+
+## Upcoming
+
+In the future, I'd like to work to do more error handling to check the data passed to the endpoints. I'd also like to identify and test the corner cases for robustness.
+
+Feature-wise, I'd like to add the ability to seach for items by name, trash items instead of deleting them to soft delete items, and I'd like to add the ability to create relationships between the items so that the user may easily traverse the database by accessing those relationships.
+
