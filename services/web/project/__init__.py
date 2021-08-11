@@ -22,7 +22,7 @@ class Item(db.Model):
 
 @app.route("/")
 def hello_world():
-    return jsonify(hello="world")
+    return jsonify(hello="fearless")
 
 @app.route('/items', methods=['POST', 'GET', 'DELETE'])
 def set_fetch_delete_items():
